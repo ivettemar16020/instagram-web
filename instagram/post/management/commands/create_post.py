@@ -40,7 +40,7 @@ class Command(BaseCommand):
                 """) 
                 print("Cantidad de usuarios creados:", User.objects.all().count())
                 for user in User.objects.all():
-                    print("pk={}: {},{} / {} - {} ".format(user.pk, user.last_name, user.first_name, user.username, user.email))
+                    print("pk={}: {}, {} / {} - {} ".format(user.pk, user.last_name, user.first_name, user.username, user.email))
 
             elif ans=="3":
                 print("""
@@ -74,13 +74,19 @@ class Command(BaseCommand):
                         Crear post
                         ----------
                         """)
+                        #print("Cantidad de post creados:", Post.objects.filter(created_by=username).count())
+                        title = raw_input("Ingrese el titulo del post: ")
+                        description = raw_input("Ingrese el contenido: ")
+                        mi_post = Post(title=title, description=description, created_by= User.objects.get(username=username))
+                        mi_post.save()
+                        #print("Ahora existen ", Post.objects.filter(created_by=username).count(), "post creados")
 
                     elif answ2=="2":
                         print("""
                         \n 
                         Like de post
                         ----------
-                        """)
+                        """)    
 
                     elif answ2=="3":
                         print("""
@@ -97,14 +103,6 @@ class Command(BaseCommand):
                     elif ans !="":
                         print("\n Opcion invalida")
 
-                    """
-                    print("Cantidad de post creados:", Post.objects.all().count())
-                    title = raw_input("Ingrese el titulo del post: ")
-                    description = raw_input("Ingrese el contenido: ")
-                    mi_post = Post(title=title, description=description)
-                    mi_post.save()
-                    print("Ahora existen ", Post.objects.all().count(), "post creados")
-                    """
             elif ans=="4":
                 print("\n Adios!") 
                 break
