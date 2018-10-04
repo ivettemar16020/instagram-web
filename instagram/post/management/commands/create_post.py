@@ -25,9 +25,11 @@ class Command(BaseCommand):
                 Crear usuario
                 --------------
                 """) 
+                nombre = raw_input("Ingrese el primer nombre del usuario: ")
+                apellido = raw_input("Ingrese el apellido del usuario: ")
                 username = raw_input("Ingrese el nombre de usuario: ")
                 email = raw_input("Ingrese un email valido: ")
-                mi_user = User(username=username, email=email)
+                mi_user = User(first_name=nombre, last_name=apellido, username=username, email=email)
                 mi_user.save()
                 
             elif ans=="2":
@@ -38,7 +40,7 @@ class Command(BaseCommand):
                 """) 
                 print("Cantidad de usuarios creados:", User.objects.all().count())
                 for user in User.objects.all():
-                    print("pk={}: {} - {} ".format(user.pk, user.username, user.email))
+                    print("pk={}: {},{} / {} - {} ".format(user.pk, user.last_name, user.first_name, user.username, user.email))
 
             elif ans=="3":
                 print("""
