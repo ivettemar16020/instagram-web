@@ -44,7 +44,7 @@ class Command(BaseCommand):
                 for user in User.objects.all():
                     print("******************************")
                     print("pk={}: {}, {} / {} - {} \n".format(user.pk, user.last_name, user.first_name, user.username, user.email))
-                    
+
             elif ans=="3":
                 print("""
                 \n 
@@ -109,8 +109,8 @@ class Command(BaseCommand):
                         Deletes post
                         ----------
                         """)
-                        all_posts = Post.objects.all() 
-                        for each_post in all_posts:
+                        mis_posts = Post.objects.filter(created_by= User.objects.get(username=username))
+                        for each_post in mis_posts:
                             likes = PostUserLike.objects.filter(post_id= each_post.pk).count()
                             print("******************************")
                             print("pk={}: {} ({}) \n {} \n".format(each_post.pk, each_post.title, likes, each_post.description))
