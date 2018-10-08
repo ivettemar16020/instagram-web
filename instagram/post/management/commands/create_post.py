@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 
 from post.models import Post
+from post.models import PostUserLike
 from django.contrib.auth.models import User
 
 
@@ -31,6 +32,7 @@ class Command(BaseCommand):
                 email = raw_input("Ingrese un email valido: ")
                 mi_user = User(first_name=nombre, last_name=apellido, username=username, email=email)
                 mi_user.save()
+                print("\n")
                 
             elif ans=="2":
                 print("""
@@ -40,8 +42,9 @@ class Command(BaseCommand):
                 """) 
                 print("Cantidad de usuarios creados:", User.objects.all().count())
                 for user in User.objects.all():
-                    print("pk={}: {}, {} / {} - {} ".format(user.pk, user.last_name, user.first_name, user.username, user.email))
-
+                    print("******************************")
+                    print("pk={}: {}, {} / {} - {} \n".format(user.pk, user.last_name, user.first_name, user.username, user.email))
+                    
             elif ans=="3":
                 print("""
                 \n 
@@ -74,19 +77,31 @@ class Command(BaseCommand):
                         Crear post
                         ----------
                         """)
-                        #print("Cantidad de post creados:", Post.objects.filter(created_by=username).count())
+                        print("Cantidad de post creados:", Post.objects.filter(created_by= User.objects.get(username=username)).count())
                         title = raw_input("Ingrese el titulo del post: ")
                         description = raw_input("Ingrese el contenido: ")
                         mi_post = Post(title=title, description=description, created_by= User.objects.get(username=username))
                         mi_post.save()
-                        #print("Ahora existen ", Post.objects.filter(created_by=username).count(), "post creados")
+                        print("Ahora existen ", Post.objects.filter(created_by = User.objects.get(username=username)).count(), "post creados")
 
                     elif answ2=="2":
                         print("""
                         \n 
                         Like de post
                         ----------
-                        """)    
+                        """)
+                        all_posts = Post.objects.all() 
+                        for each_post in all_posts:
+                            likes = PostUserLike.objects.filter(post_id= each_post.pk).count()
+                            print("******************************")
+                            print("pk={}: {} ({}) \n {} \n".format(each_post.pk, each_post.title, likes, each_post.description))
+                
+                        post_pk = raw_input("\n Por favor ingrese el pk del post al que desea dar 'me gusta':  ")
+                        chosen_post = Post.objects.get(pk= post_pk)
+                        like = PostUserLike(user= User.objects.get(username=username), post= chosen_post)
+                        like.save()
+                        print("\n")
+
 
                     elif answ2=="3":
                         print("""
@@ -94,6 +109,16 @@ class Command(BaseCommand):
                         Deletes post
                         ----------
                         """)
+                        all_posts = Post.objects.all() 
+                        for each_post in all_posts:
+                            likes = PostUserLike.objects.filter(post_id= each_post.pk).count()
+                            print("******************************")
+                            print("pk={}: {} ({}) \n {} \n".format(each_post.pk, each_post.title, likes, each_post.description))
+                
+                        post_pk = raw_input("\n Por favor ingrese el pk del post que desea 'eliminar':  ")
+                        chosen_post = Post.objects.get(pk= post_pk)
+                        chosen_post.delete()
+                        print("\n El post ha sido eliminado \n")
 
                     elif answ2=="4":
                         print("Adios ", username)
